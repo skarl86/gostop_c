@@ -15,16 +15,6 @@ typedef struct hwatoo
 	struct hwatoo *next;
 } HWATOO, *P_HWATOO;
 
-/* 플레이어 정보 구조체(우종이가 더 추가해야함) */
-typedef struct player_info
-{
-	bool isSwing; // 흔듦
-	bool isChongtong; // 총통
-	P_HWATOO head_pae; // 플레이어 패 정보를 접근 위한 헤더 포인터. added by NK
-	P_SCORE score; // calcurate.c 에서 최초로 메모리 할당. 그 외에서는 할당 금지 절대!! added by NK
-} player_info;
-
-/* 플레이어의 점수 정보 구조체.*/
 typedef struct score
 {
 	int gwang; 	// 광 점수.
@@ -32,6 +22,17 @@ typedef struct score
 	int sip;	// 10 점수.
 	int wo;		// 5 점수.
 }SCORE, *P_SCORE;
+/* 플레이어의 점수 정보 구조체.*/
+
+typedef struct player_info
+{
+	bool isSwing; // 흔듦
+	bool isChongtong; // 총통
+	P_HWATOO head_pae; // 플레이어 패 정보를 접근 위한 헤더 포인터. added by NK
+	P_SCORE score; // calcurate.c 에서 최초로 메모리 할당. 그 외에서는 할당 금지 절대!! added by NK
+} player_info;
+/* 플레이어 정보 구조체(우종이가 더 추가해야함) */
+
 
 void init();
 P_HWATOO init_pae();
