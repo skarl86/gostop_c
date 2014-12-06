@@ -7,12 +7,16 @@ void init()
 	extern player_info A_player, B_player, C_player;
 	extern P_HWATOO A_head, B_head, C_head, PAE_head;
 	extern winner;
-
+	
 	/* 플레이어 초기화.*/
 	A_player.id[0] = 'A';
 	B_player.id[0] = 'B';
 	C_player.id[0] = 'C';
 
+	//player정보 초기화
+	A_player.head_pae = NULL;
+	B_player.head_pae = NULL;
+	C_player.head_pae = NULL;
 	/* 초기 화투더미 생성 */
 	head = init_pae(); 
 	
