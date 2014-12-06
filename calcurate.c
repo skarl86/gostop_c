@@ -22,7 +22,7 @@ void calcurate(void * player) {
 	player_info *p_player_info = (player_info *) player;
 
 	// 사용자.
-	p_player_info->score = (P_SCORE) malloc(SCORE);
+	p_player_info->score = (P_SCORE) malloc(sizeof(SCORE));
 
 	// 예외 처리.
 	if (player == NULL) {
@@ -44,7 +44,7 @@ void calcurate(void * player) {
 	 * 1) 피를 10장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
 	 * ** 쌍피는 피 2 장으로 계산해야 함
 	 */
-	_cal_p_player_info(player);
+	_cal_pi(player);
 	/**
 	 * 10 자리 점
 	 * 1) 10 자리를 5장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
@@ -66,7 +66,7 @@ void _cal_gwang(void *player) {
 	int count_gwang = 0;
 
 	while (head_pae->next != NULL) {
-		if (head->id == INDEX_OF_BE_GWANG) {
+		if (head_pae->id == INDEX_OF_BE_GWANG) {
 			// 비광일 존재할 경우.
 			has_be_gwang = 1;
 		}
