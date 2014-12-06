@@ -1,6 +1,7 @@
 #include<stdio.h>
-#include"setting.h"
 #include<stdlib.h>
+#include"setting.h"
+#include "game.h"
 P_HWATOO selectPae(P_HWATOO player,int number)
 {
 	int i = 0;
@@ -252,6 +253,14 @@ void matchPae(P_HWATOO output,player_info * info )
 	else if (count != 0)
 	{
 		//먹는 경우
+		// 만약 싼걸 먹거나, 따닥 일 경우 상대방의 패를 빼온다.
+		if (count == 4){
+			// 현재 턴의 플레이어를 제외한 나머지 플레이어에게서
+			// '피' 패를 가져온다.
+			appendList(info->head_pae, steal_pi(info));
+			info->head_pae = sortList(info->head_pae);
+		}
+
 		info -> head_pae = appendList( info -> head_pae,match );
 	}
 		
