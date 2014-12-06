@@ -14,22 +14,22 @@ P_HWATOO _steal_pi(player_info * pae);
 P_HWATOO steal_pi(player_info * player) {
 	extern player_info A_player, B_player, C_player;
 	P_HWATOO stealed_pae;
-	if (player->id[0] == "A") {
-		stealed_pae = _steal_pi(B_player);
-		append_pae(stealed_pae, _steal_pi(C_player));
+	if (player->id[0] == 'A') {
+		stealed_pae = _steal_pi(&B_player);
+		append_pae(stealed_pae, _steal_pi(&C_player));
 	}
-	if (player->id[0] == "B") {
-		stealed_pae = _steal_pi(A_player);
-		append_pae(stealed_pae, _steal_pi(B_player));
+	if (player->id[0] == 'B') {
+		stealed_pae = _steal_pi(&A_player);
+		append_pae(stealed_pae, _steal_pi(&B_player));
 	}
-	if (player->id[0] == "C") {
-		stealed_pae = _steal_pi(A_player);
-		append_pae(stealed_pae, _steal_pi(B_player));
+	if (player->id[0] == 'C') {
+		stealed_pae = _steal_pi(&A_player);
+		append_pae(stealed_pae, _steal_pi(&B_player));
 	}
 
 	return stealed_pae;
 }
-P_HWATOO _stear_pi(player_info * player) {
+P_HWATOO _steal_pi(player_info * player) {
 	P_HWATOO pae = player->head_pae;
 	while (pae != NULL) {
 		if (!strcmp(pae->name, PI)) {
