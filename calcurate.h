@@ -10,5 +10,5 @@
 
 // 외부에 제공될 인터페이스 함수.
 void calcurate(void * player);
-
+void test_show_score(void * player);
 #endif /* _CALCURATE_ */

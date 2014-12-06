@@ -1,4 +1,5 @@
 #include "setting.h"
+#include "calcurate.h"
 
 /* 전역 변수 선언 */
 P_HWATOO head = NULL; // 화투더미
@@ -35,6 +36,8 @@ int main()
 			appendList(PAE_head,p);
 			PAE_head = sortList(PAE_head);
 			call_show_pae();
+			calcurate(&A_player);
+			test_show_score(&A_player);
 		}
 		else if (*cmd == 57 && strlen(cmd) == 1)
 		{

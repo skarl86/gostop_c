@@ -18,6 +18,13 @@ static void _cal_pi(void *player);
 static void _cal_sip(void *player);
 static void _cal_wo(void *player);
 
+void test_show_score(void * player){
+	player_info *p_info = (player_info *) player;
+
+	printf("광 : %d,  피 : %d, 10점수 : %d, 5점수 : %d",
+			p_info->score->gwang, p_info->score->pi, p_info->score->sip, p_info->score->wo);
+
+}
 void calcurate(void * player) {
 	player_info *p_player_info = (player_info *) player;
 
