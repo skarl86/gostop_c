@@ -36,14 +36,10 @@ int main() {
 			A_player.head_pae = head;
 			calcurate(&A_player);
 			test_show_score(&A_player);
-<<<<<<< HEAD
 			printf("%d",is_win(&A_player));
 		}
 		else if (*cmd == 57 && strlen(cmd) == 1)
 		{
-=======
-		} else if (*cmd == 57 && strlen(cmd) == 1) {
->>>>>>> adab579b9d370d56acc48419dcc00c0cca44c1ca
 			printf("7이상의 숫자 입력");
 		} else if (!strcmp(cmd, "save"))
 			printf("저장\n");
