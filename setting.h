@@ -6,6 +6,11 @@
 #include<stdbool.h>
 #include<time.h>
 
+#define GWANG 				"광"
+#define PI					"피"
+#define WO					"오"
+#define SIP					"십"
+
 typedef enum show{
 	GET_PAE, // 먹은 패.
 	OWN_PAE, // 가진 패.
@@ -41,6 +46,11 @@ typedef struct player_info
 	P_HWATOO head_pae;
 	P_SCORE score;
 } player_info;
+
+typedef struct game
+{
+	char winner[2];
+}GAME, *P_GAME;
 
 void init();
 P_HWATOO init_pae();

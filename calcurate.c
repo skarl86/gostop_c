@@ -6,10 +6,6 @@
  */
 #include "setting.h"
 
-#define GWANG 				"광"
-#define PI					"피"
-#define WO					"오"
-#define SIP					"십"
 #define INDEX_OF_BE_GWANG 	44
 
 // 이 파일에서만 사용하게 될 private 함수들.
