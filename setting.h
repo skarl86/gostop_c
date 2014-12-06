@@ -26,6 +26,7 @@ typedef struct score
 
 typedef struct player_info
 {
+	char id[2]; // 알파벳으로 구성된 플레이어 고유 번호.
 	bool isSwing; // 흔듦
 	bool isChongtong; // 총통
 	P_HWATOO head_pae; // 플레이어 패 정보를 접근 위한 헤더 포인터. added by NK
