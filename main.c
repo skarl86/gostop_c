@@ -36,6 +36,7 @@ int main()
 			appendList(PAE_head,p);
 			PAE_head = sortList(PAE_head);
 			call_show_pae();
+			A_player.head_pae = head;
 			calcurate(&A_player);
 			test_show_score(&A_player);
 		}

@@ -20,8 +20,14 @@ void _cal_wo(void *player);
 
 void test_show_score(void * player){
 	player_info *p_info = (player_info *) player;
+	P_HWATOO head = p_info->head_pae;
 
-	printf("광 : %d,  피 : %d, 10점수 : %d, 5점수 : %d",
+	while(head != NULL){
+		printf("%d%s\t",head->isSSangpi, head->name);
+		head = head->next;
+	}
+	printf("\n");
+	printf("광 : %d,  피 : %d, 10점수 : %d, 5점수 : %d\n",
 			p_info->score->gwang, p_info->score->pi, p_info->score->sip, p_info->score->wo);
 
 }
