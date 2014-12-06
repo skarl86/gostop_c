@@ -12,4 +12,4 @@ calcurate.o : setting.h calcurate.h
 play.o : setting.h
 	gcc -c
 clean:
-    rm $(OBJS) $(TARGET) 
+    rm $(OBJS) $(TARGET)
