@@ -18,18 +18,19 @@ void init()
 	PAE_head = give_pae(); //패 깔기
 	
 	/* 흔들기와 총통 체크 함수 호출 */
-	swing_chongtong_check(&A_player, A_head);
-	swing_chongtong_check(&B_player, B_head);
-	swing_chongtong_check(&C_player, C_head);
+	//swing_chongtong_check(&A_player, A_head);
+	//swing_chongtong_check(&B_player, B_head);
+	//swing_chongtong_check(&C_player, C_head);
  
 	// 총통 (점수 계산하고 끝내는거 추가해야함!!)
+	/*
 	if (A_player.isChongtong)
 		winner = 'A';
 	else if (B_player.isChongtong)
 		winner = 'B';
 	else if (C_player.isChongtong)
 		winner = 'C';
-
+	*/
 }
 
 /* 초기 화투 더미 셋팅 함수 */
@@ -37,7 +38,7 @@ P_HWATOO init_pae()
 {
 	P_HWATOO head = NULL;
 	P_HWATOO new_pae = NULL;
-	P_HWATOO current;
+	P_HWATOO current = NULL;
 	int i, num = 1;
 	char gubun[48][4] = {"광", "오", "피", "피",
 		"십", "오", "피", "피", "광", "오", "피", "피",
@@ -45,7 +46,7 @@ P_HWATOO init_pae()
 		"십", "오", "피", "피", "십", "오", "피", "피",
 		"광", "십", "피", "피", "피", "오", "피", "피",
 		"십", "오", "피", "피", "광", "피", "피", "피",
-		"광", "십", "오", "피]"};
+		"광", "십", "오", "피"}; 
 
 	for (i = 0; i < 48; i++)
 	{
@@ -59,9 +60,13 @@ P_HWATOO init_pae()
 		else
 			new_pae -> isSSangpi = false;
 		
+		new_pae -> next = NULL;
 		// 링크 연결
 		if (head == NULL)
+		{
+
 			head = new_pae;
+		}
 		else
 		{
 			current = head;

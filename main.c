@@ -8,9 +8,10 @@ char winner = 'A';
 
 int main()
 {
-	char cmd[5] = ""; // 명령어 변수 
+	P_HWATOO p;
+	char cmd[5] = "\0"; // 명령어 변수 
 	srand((unsigned)time(NULL));
-	
+		
 	init(); // 패 셋팅
 	call_show_pae(); // 패 출력 
 
@@ -29,11 +30,16 @@ int main()
 			printf("설명보기\n");
 		else if (*cmd >= 49 && *cmd <= 55 && strlen(cmd) == 1)
 		{
-			printf("낼화투선택\n");
+			p = selectPae(A_head,atoi(cmd));
+			A_head = cutList(A_head,p);
+			appendList(PAE_head,p);
+			PAE_head = sortList(PAE_head);
 			call_show_pae();
 		}
 		else if (*cmd == 57 && strlen(cmd) == 1)
-			printf("십을 피로 또는 십으로 이동\n");
+		{
+			printf("7이상의 숫자 입력");
+		}
 		else if (!strcmp(cmd, "save"))
 			printf("저장\n");
 		else if (!strcmp(cmd, "load"))
