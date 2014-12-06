@@ -66,4 +66,8 @@ extern P_HWATOO cutList(P_HWATOO head, P_HWATOO cut,int count);
 extern P_HWATOO appendList(P_HWATOO head, P_HWATOO append);
 extern P_HWATOO sortList(P_HWATOO head);
 extern void matchPae(P_HWATOO output, player_info * info);
+extern P_HWATOO countMatch(P_HWATOO, int *);
+extern P_HWATOO appendMatch(P_HWATOO,P_HWATOO ,int *);
+extern void matchPae(P_HWATOO, player_info *);
+
 #endif // _GOSTOP_

@@ -14,7 +14,7 @@ P_HWATOO selectPae(P_HWATOO player,int number)
 	return temp;
 
 }
-
+//cut -> next = NULL이된다.
 P_HWATOO cutList(P_HWATOO head,P_HWATOO cut,int count)
 {
 	P_HWATOO current = NULL;	//탐색을 위한 포인터
@@ -32,12 +32,14 @@ P_HWATOO cutList(P_HWATOO head,P_HWATOO cut,int count)
 		while(current -> next != cut)	//연결을 끊을 포인터와 탐색 포인터가 같을때까지 반복
 		{
 			current = current -> next;	//current증가
+
 			if(current == NULL)
 			{
 				return NULL;
 			}
 
 		}
+
 		current -> next = cut -> next -> next -> next;
 		cut -> next -> next -> next = NULL;
 		return head;
@@ -136,26 +138,33 @@ P_HWATOO sortList(P_HWATOO head)
 	return head;
 
 }
-
-// output : 사용자가 낸패 (next 는 NULL값)
-void matchPae(P_HWATOO output,player_info * info )
+//바닥 패에서 내는 패와 몇개가 맞는 지 저장하고, 맞는 패의 주소를 리턴
+P_HWATOO countMatch(P_HWATOO output,int * count)
 {
-	extern P_HWATOO PAE_head;
-	P_HWATOO match = NULL, current = PAE_head;
-	int count = 0,cmd = 0;
+	extern P_HWATOO PAE_head;	//바닥패
+	P_HWATOO current = PAE_head;	//탐색을 위한 임시 포인터 초기화
+	P_HWATOO match = NULL;
+
 	while(current != NULL)	//바닥에 있는 패 에 맞는 것이 있는지 검사
 	{
 		if(current -> no == output->no)
 		{
-			if(count == 0)	//처음으로 맞는것이 있는경우 
+			if(*count == 0)	//처음으로 맞는것이 있는경우 
 			{
 				match = current;	//맞는 패의 포인터 저장
 			}
-			count++;	//count증가
+			*count = *count + 1;	//count증가
 		}
 		current = current -> next;	//current포인터 증가
 	}
-	if(count == 2)
+	return match;
+
+}
+P_HWATOO appendMatch(P_HWATOO match,P_HWATOO output,int * count)
+{
+	int cmd =0;
+	extern P_HWATOO PAE_head;
+	if(*count == 2)
 	{	
 		printf("다음중 패 하나를 선택하세요\n");
 		while(1)
@@ -178,57 +187,73 @@ void matchPae(P_HWATOO output,player_info * info )
 			printf("번호를 잘못 누르셨습니다\n");
 		
 		}
-		count =1;
-		PAE_head = cutList(PAE_head, match, count);	//바닥 패에서 맞은 패 자르기
-		info -> head_pae = appendList(info -> head_pae, match);	//바닥패에서 맞은 패 먹은패 정보에 붙이기
-		info -> head_pae = sortList(info-> head_pae);	//먹은패 정보 정렬
+		*count =1;
+		PAE_head = cutList(PAE_head, match, *count);	//바닥 패에서 맞은 패 자르기
+		match = appendList(match,output);
 	}
-	else if(count == 0)
+	else if(*count == 1 )
+	{
+		PAE_head = cutList(PAE_head, match, *count);	//바닥패에서 맞은 패만 잘라오기
+		match = appendList(match,output);	//match리스트 연결
+	}
+	else if(*count == 0)
 	{
 		PAE_head = appendList(PAE_head,output);	//바닥패에 낸패 붙이기
 		PAE_head = sortList(PAE_head);
+		return NULL;
 	}
-	else
+	else	//3개인 경우
 	{
-		info -> head_pae = appendList(info -> head_pae, output);
-		PAE_head = cutList(PAE_head, match, count);
-		info -> head_pae = appendList(info -> head_pae, match);
-		info -> head_pae = sortList(info-> head_pae);
+		
+		PAE_head = cutList(PAE_head, match, *count);
+		match = appendList(match,output);
 	}
-	
+	return match;
 }
-
-void show_eat_pae(player_info A_head, player_info B_head, player_info C_head)
+// output : 사용자가 낸패 (next 는 NULL값)
+void matchPae(P_HWATOO output,player_info * info )
 {
-	printf("A가 먹은 패 : ");
-	if(A_head.head_pae != NULL)
-	{
-		for(;A_head.head_pae; A_head.head_pae = A_head.head_pae -> next)
-		{
-			printf("%d%s  ",A_head.head_pae -> no, A_head.head_pae -> name);
-		}
-	}
-	printf("\n\n");
-	if(A_head.head_pae != NULL)
-	{
-		printf("B가 먹은 패 : ");
-		for(; B_head.head_pae; B_head.head_pae = B_head.head_pae -> next)
-		{
-			printf("%d%s  ",B_head.head_pae -> no, B_head.head_pae -> name);
-		}
-	}
-	printf("\n\n");
-	printf("C가 먹은 패 : ");
-
-	if(A_head.head_pae != NULL)
-	{
-		for(; C_head.head_pae; C_head.head_pae = C_head.head_pae -> next)
-		{
-			printf("%d%s  ",C_head.head_pae -> no, C_head.head_pae -> name);
-		}
-	}
-	printf("\n\n");
-
+	extern P_HWATOO PAE_head;
+	extern P_HWATOO head;
 	
+	P_HWATOO up_pae = NULL;
+	P_HWATOO match = NULL, current = PAE_head,up_match = NULL,temp = NULL;
+	int count = 0,cmd = 0;
+	
+	match = countMatch(output, &count);
+	match = appendMatch(match,output,&count);
+	
+	
+	//더미에서 화투 뒤집기
+	up_pae = selectPae(head,1);
+	head = cutList(head,up_pae,1);
 
+	printf("뒤집은 패 번호 : %d 이름 : %s\n",up_pae->no, up_pae->name);
+	count = 0;	
+	up_match = countMatch(up_pae, &count);
+
+	up_match = appendMatch(up_match,up_pae,&count);
+	
+	match = appendList(match, up_match);
+	//match 는 짝이 맞는 모든 화투패
+	count = 0;
+	temp = match;
+	while(temp != NULL)
+	{
+		count++;
+		temp = temp -> next;
+	}
+	//만약에 count가 3이면 싼거 라서 못먹음
+	//
+	if(count == 3)
+	{
+		PAE_head = appendList(PAE_head,match);	
+	}
+	else if (count != 0)
+	{
+		//먹는 경우
+		info -> head_pae = appendList( info -> head_pae,match );
+	}
+		
 }
+
