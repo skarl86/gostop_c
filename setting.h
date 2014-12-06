@@ -32,7 +32,6 @@ typedef struct score
 }SCORE, *P_SCORE;
 /* 플레이어의 점수 정보 구조체.*/
 
-
 /* 플레이어 정보 구조체(우종이가 더 추가해야함) */
 typedef struct player_info
 {
@@ -40,7 +39,7 @@ typedef struct player_info
 	bool isSwing; // 흔듦
 	bool isChongtong; // 총통
 	P_HWATOO head_pae;
-	P_SCORE scoe;
+	P_SCORE score;
 } player_info;
 
 void init();
