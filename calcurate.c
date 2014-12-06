@@ -31,7 +31,7 @@ void test_show_score(void * player){
 			p_info->score->gwang, p_info->score->pi, p_info->score->sip, p_info->score->wo);
 
 }
-extern bool is_win(void * player){
+bool is_win(void * player){
 	player_info *p_info = (player_info *) player;
 	P_SCORE p_sc = p_info->score;
 	int sum;

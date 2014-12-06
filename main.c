@@ -39,6 +39,7 @@ int main()
 			A_player.head_pae = head;
 			calcurate(&A_player);
 			test_show_score(&A_player);
+			printf("%d",is_win(&A_player));
 		}
 		else if (*cmd == 57 && strlen(cmd) == 1)
 		{
