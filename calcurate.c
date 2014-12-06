@@ -31,6 +31,18 @@ void test_show_score(void * player){
 			p_info->score->gwang, p_info->score->pi, p_info->score->sip, p_info->score->wo);
 
 }
+extern bool is_win(void * player){
+	player_info *p_info = (player_info *) player;
+	P_SCORE p_sc = p_info->score;
+	int sum;
+	bool b_is_win = 0;
+	sum = p_sc->gwang + p_sc->pi + p_sc->sip + p_sc->wo;
+
+	if(sum >= 3) // 3점 이상이면 승리.
+		b_is_win = 1;
+
+	return b_is_win;
+}
 void calcurate(void * player) {
 	player_info *p_player_info = (player_info *) player;
 
