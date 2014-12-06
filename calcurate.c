@@ -13,10 +13,10 @@
 #define INDEX_OF_BE_GWANG 	44
 
 // 이 파일에서만 사용하게 될 private 함수들.
-static void _cal_gwang(void *player);
-static void _cal_pi(void *player);
-static void _cal_sip(void *player);
-static void _cal_wo(void *player);
+void _cal_gwang(void *player);
+void _cal_pi(void *player);
+void _cal_sip(void *player);
+void _cal_wo(void *player);
 
 void test_show_score(void * player){
 	player_info *p_info = (player_info *) player;
@@ -72,13 +72,14 @@ void _cal_gwang(void *player) {
 	bool has_be_gwang = 0; // 비광 체크 불린.
 	int count_gwang = 0;
 
-	while (head_pae->next != NULL) {
+	while (head_pae != NULL) {
 		if (head_pae->id == INDEX_OF_BE_GWANG) {
 			// 비광일 존재할 경우.
 			has_be_gwang = 1;
 		}
 		if (!strcmp(head_pae->name, GWANG))
 			count_gwang++;
+		head_pae = head_pae->next;
 	}
 
 	if (count_gwang >= 3) { // 광이 3~5일때.
@@ -98,15 +99,15 @@ void _cal_pi(void *player) {
 	P_HWATOO head_pae = p_player_info->head_pae;
 	int count_pi = 0;
 
-	while (head_pae->next != NULL) {
+	while (head_pae != NULL) {
 		if (!strcmp(head_pae->name, PI)) {
 			if (head_pae->isSSangpi) {
 				count_pi += 2;
 			} else {
 				count_pi += 1;
 			}
-
 		}
+		head_pae = head_pae->next;
 	}
 
 	// 피가 10장일 경우 1점.
@@ -124,10 +125,11 @@ void _cal_sip(void *player) {
 	P_HWATOO head_pae = p_player_info->head_pae;
 	int count_sip = 0;
 
-	while (head_pae->next != NULL) {
+	while (head_pae != NULL) {
 		if (!strcmp(head_pae->name, SIP)) {
 			count_sip++;
 		}
+		head_pae = head_pae->next;
 	}
 
 	// 1
@@ -146,7 +148,7 @@ void _cal_wo(void *player) {
 	int count_hongdan = 0;
 	int count_chodan = 0;
 
-	while (head_pae->next != NULL) {
+	while (head_pae != NULL) {
 		if (!strcmp(head_pae->name, WO)) {
 			count_wo++;
 			// 초단, 청단, 홍단 인덱스.
@@ -165,6 +167,7 @@ void _cal_wo(void *player) {
 				count_hongdan++;
 			}
 		}
+		head_pae = head_pae->next;
 	}
 
 	// 초단, 홍단, 청단 체크.
