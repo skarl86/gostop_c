@@ -42,4 +42,9 @@ void swing_chongtong_check(player_info *info, P_HWATOO);
 void call_show_pae();
 void show_pae(P_HWATOO, char, player_info *info);
 
+extern P_HWATOO selectPae(P_HWATOO player, int number);
+extern P_HWATOO cutList(P_HWATOO head, P_HWATOO cut);
+extern P_HWATOO appendList(P_HWATOO head, P_HWATOO append);
+extern P_HWATOO sortList(P_HWATOO head);
+
 #endif // _GOSTOP_
