@@ -1,8 +1,8 @@
-OBJS = main.o hwatoo_setting.o calcurate.o play.o
+OBJS = play.o calcurate.o main.o hwatoo_setting.o
 TARGET = gostop
 
-gostop : main.o hwatoo_setting.o calcurate.o
-	gcc -o gostop main.o hwatoo_setting.o
+gostop : $(OBJS)
+	gcc -o $(TARGET) $(OBJS)
 main.o : setting.h
 	gcc -c main.c
 hwatoo_setting.o : setting.h
@@ -12,4 +12,4 @@ calcurate.o : setting.h calcurate.h
 play.o : setting.h
 	gcc -c play.c
 clean:
-    rm $(OBJS) $(TARGET)
+	rm $(OBJS) $(TARGET)
