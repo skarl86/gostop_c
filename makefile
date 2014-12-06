@@ -10,6 +10,6 @@ hwatoo_setting.o : setting.h
 calcurate.o : setting.h calcurate.h
 	gcc -c calcurate.c
 play.o : setting.h
-	gcc -c
+	gcc -c play.c
 clean:
     rm $(OBJS) $(TARGET)
