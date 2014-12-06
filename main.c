@@ -69,9 +69,9 @@ void call_show_pae()
 
 	show_ex_pae(PAE_head, PLACE_PAE, NULL); // 깔린 패 출력
 
-	show_ex_pae(A_head, GET_PAE, &A_player); // A플레이어 먹은 패 출력.
-	show_ex_pae(B_head, GET_PAE, &B_player); // A플레이어 먹은 패 출력.
-	show_ex_pae(C_head, GET_PAE, &C_player); // A플레이어 먹은 패 출력.
+	show_ex_pae(A_player.head_pae, GET_PAE, &A_player); // A플레이어 먹은 패 출력.
+	show_ex_pae(B_player.head_pae, GET_PAE, &B_player); // A플레이어 먹은 패 출력.
+	show_ex_pae(C_player.head_pae, GET_PAE, &C_player); // A플레이어 먹은 패 출력.
 }
 
 void show_ex_pae(P_HWATOO h, SHOW_TYPE type, player_info *info){
