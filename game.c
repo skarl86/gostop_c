@@ -31,13 +31,25 @@ P_HWATOO steal_pi(player_info * player) {
 }
 P_HWATOO _steal_pi(player_info * player) {
 	P_HWATOO pae = player->head_pae;
+	P_HWATOO ssang_pi = NULL; // 쌍피밖에 없을 경우를 대비함.
 	while (pae != NULL) {
+		// 피를 가져온다. 근데 1피만 가져와야 한다.
 		if (!strcmp(pae->name, PI)) {
-			delete_pae(player->head_pae, pae);
-			pae->next = NULL;
-			return pae;
+			if(!pae->isSSangpi){
+				delete_pae(player->head_pae, pae);
+				return pae;
+			}else if(pae->isSSangpi){
+				ssang_pi = pae;
+			}
 		}
 		pae = pae->next;
+	}
+
+	// 상대 플레이어가 쌍피만 가지고 있을 경우.
+	if(pae == NULL && !(ssang_pi == NULL) ){
+		// 쌍피를 넘겨준다.
+		delete_pae(player->head_pae, ssang_pi);
+		return ssang_pi;
 	}
 	return NULL;
 }

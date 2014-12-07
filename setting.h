@@ -43,8 +43,9 @@ typedef struct player_info
 	char id[2]; // 알파벳으로 구성된 플레이어 고유 번호.
 	bool isSwing; // 흔듦
 	bool isChongtong; // 총통
-	P_HWATOO head_pae;
-	P_SCORE score;
+	P_HWATOO head_pae; // 먹은 패.
+	P_SCORE score; // 각각 광,피,10,5 점수.
+	int total_score; // 총 점수.
 } player_info;
 
 typedef struct game
@@ -60,7 +61,7 @@ void swing_chongtong_check(player_info *info, P_HWATOO);
 void call_show_pae();
 void show_ex_pae(P_HWATOO h, SHOW_TYPE type, player_info *info);
 void show_pae(P_HWATOO, char, player_info *info);
-
+void start_play(char input, int cmd);
 extern P_HWATOO selectPae(P_HWATOO player, int number);
 extern P_HWATOO cutList(P_HWATOO head, P_HWATOO cut,int count);
 extern P_HWATOO appendList(P_HWATOO head, P_HWATOO append);

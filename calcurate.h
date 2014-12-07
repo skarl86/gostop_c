@@ -10,7 +10,7 @@
 
 // 외부에 제공될 인터페이스 함수.
 // 플레이어 점수 계산.
-extern void calcurate(void * player);
+extern int calcurate(void * player);
 // 플레이어가 났는지 확인.
 extern int is_win(void * player);
 extern void test_show_score(void * player);

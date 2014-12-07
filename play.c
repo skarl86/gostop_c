@@ -106,7 +106,7 @@ P_HWATOO sortList(P_HWATOO head)
 	}
 	count++; //count 1추가로 증가
 	current = head;	//current포인터 초기화
-	
+
 	arr_hwatoo = (P_HWATOO *)malloc(sizeof(P_HWATOO) * count);	//P_HWATOO배열 할당
 	for(i = 0; i < count; i++)
 	{
@@ -150,7 +150,7 @@ P_HWATOO countMatch(P_HWATOO output,int * count)
 	{
 		if(current -> no == output->no)
 		{
-			if(*count == 0)	//처음으로 맞는것이 있는경우 
+			if(*count == 0)	//처음으로 맞는것이 있는경우
 			{
 				match = current;	//맞는 패의 포인터 저장
 			}
@@ -250,18 +250,32 @@ void matchPae(P_HWATOO output,player_info * info )
 	{
 		PAE_head = appendList(PAE_head,match);	
 	}
-	else if (count != 0)
+	else
 	{
 		//먹는 경우
 		// 만약 싼걸 먹거나, 따닥 일 경우 상대방의 패를 빼온다.
-		if (count == 4){
+		if (count >= 4)
+		{
 			// 현재 턴의 플레이어를 제외한 나머지 플레이어에게서
 			// '피' 패를 가져온다.
-			appendList(info->head_pae, steal_pi(info));
-			info->head_pae = sortList(info->head_pae);
+			count = 0;
+			temp = match;
+			while(temp -> next != NULL)
+			{
+				if(temp -> no == temp -> next -> no)
+				{
+					count++;
+				}
+				temp = temp -> next;
+			}
+			if(count == 3)
+			{
+				info -> head_pae = appendList(info->head_pae, steal_pi(info));
+			}
 		}
 
 		info -> head_pae = appendList( info -> head_pae,match );
+		info -> head_pae = sortList(info->head_pae);
 	}
 		
 }

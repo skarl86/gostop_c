@@ -9,10 +9,10 @@
 #define INDEX_OF_BE_GWANG 	44
 
 // 이 파일에서만 사용하게 될 private 함수들.
-void _cal_gwang(void *player);
-void _cal_pi(void *player);
-void _cal_sip(void *player);
-void _cal_wo(void *player);
+int _cal_gwang(void *player);
+int _cal_pi(void *player);
+int _cal_sip(void *player);
+int _cal_wo(void *player);
 
 void test_show_score(void * player){
 	player_info *p_info = (player_info *) player;
@@ -39,16 +39,16 @@ bool is_win(void * player){
 
 	return b_is_win;
 }
-void calcurate(void * player) {
+int calcurate(void * player) {
 	player_info *p_player_info = (player_info *) player;
-
+	int sum = 0;
 	// 사용자.
 	p_player_info->score = (P_SCORE) malloc(sizeof(SCORE));
 
 	// 예외 처리.
 	if (player == NULL) {
 		printf("ERROR :: Player is NULL");
-		return;
+		return 0;
 	}
 
 	/**
@@ -59,28 +59,32 @@ void calcurate(void * player) {
 	 * 3) 광이 4장이면 4점
 	 * 4) 광이 5장이면 15점
 	 */
-	_cal_gwang(player);
+	sum += _cal_gwang(player);
 	/**
 	 * 피로 점수
 	 * 1) 피를 10장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
 	 * ** 쌍피는 피 2 장으로 계산해야 함
 	 */
-	_cal_pi(player);
+	sum += _cal_pi(player);
 	/**
 	 * 10 자리 점
 	 * 1) 10 자리를 5장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
 	 * 2) 고도리는 5점
 	 */
-	_cal_sip(player);
+	sum += _cal_sip(player);
 	/*
 	 * 5 자리로 점수
 	 * 1) 5 자리를 5장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
 	 * 2) 청단, 초단, 홍단 : 각 3점씩
 	 */
-	_cal_wo(player);
+	sum += _cal_wo(player);
+
+	p_player_info->total_score = sum;
+
+	return sum;
 }
 
-void _cal_gwang(void *player) {
+int _cal_gwang(void *player) {
 	player_info *p_player_info = (player_info *) player;
 	P_HWATOO head_pae = p_player_info->head_pae;
 	bool has_be_gwang = 0; // 비광 체크 불린.
@@ -106,9 +110,11 @@ void _cal_gwang(void *player) {
 	} else { // 광이 0~2개 일때는 0점 처리.
 		p_player_info->score->gwang = 0;
 	}
+
+	return p_player_info->score->gwang;
 }
 
-void _cal_pi(void *player) {
+int _cal_pi(void *player) {
 	player_info *p_player_info = (player_info *) player;
 	P_HWATOO head_pae = p_player_info->head_pae;
 	int count_pi = 0;
@@ -132,9 +138,11 @@ void _cal_pi(void *player) {
 	} else { // 그외에는 0점.
 		p_player_info->score->pi = 0;
 	}
+
+	return p_player_info->score->pi;
 }
 
-void _cal_sip(void *player) {
+int _cal_sip(void *player) {
 	player_info *p_player_info = (player_info *) player;
 	P_HWATOO head_pae = p_player_info->head_pae;
 	int count_sip = 0;
@@ -152,9 +160,11 @@ void _cal_sip(void *player) {
 	} else if (count_sip > 5) {
 		p_player_info->score->sip = (count_sip / 5) + (count_sip % 5);
 	}
+
+	return p_player_info->score->sip;
 }
 
-void _cal_wo(void *player) {
+int _cal_wo(void *player) {
 	player_info *p_player_info = (player_info *) player;
 	P_HWATOO head_pae = p_player_info->head_pae;
 	int count_wo = 0;
@@ -186,12 +196,14 @@ void _cal_wo(void *player) {
 
 	// 초단, 홍단, 청단 체크.
 	if (count_chodan == 3) {
-		p_player_info->score += 3;
+		p_player_info->score->wo += 3;
 	}
 	if (count_chungdan == 3) {
-		p_player_info->score += 3;
+		p_player_info->score->wo += 3;
 	}
 	if (count_hongdan == 3) {
-		p_player_info->score += 3;
+		p_player_info->score->wo += 3;
 	}
+
+	return p_player_info->score->wo;
 }
