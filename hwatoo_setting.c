@@ -194,25 +194,38 @@ P_HWATOO give_pae()
 /* 흔들기와 총통 체크 함수 */
 void swing_chongtong_check(player_info *player, P_HWATOO player_head)
 {
-	int cnt = 0;
+	int i,j,cnt = 0;
 	bool isSwing = false;
 	bool isChongtong = false;
+	P_HWATOO temp = player_head;	//임시 포인터 선언
+	P_HWATOO arr_hwatoo[7];
 
-	while (player_head -> next != NULL)
+	for(i = 0; i < 7; i++)
 	{
-		// 현재 패의 월과 다음 패의 월이 같다면 
-		if (player_head -> no == player_head -> next -> no)
+		arr_hwatoo[i] = temp;
+		temp = temp -> next;
+	}
+	//배열에 패 초기화
+	for(i = 0; i < 6; i++)
+	{
+		for(j = i+1; j < 7; j++)
 		{
-			cnt++;
-			if (cnt == 2 && isSwing == false)
-				isSwing = true;
-			else if (cnt == 3 && isChongtong == false)
-				isChongtong = true;
+			if(arr_hwatoo[i] -> no == arr_hwatoo[j]->no)
+			{
+				cnt++;
+			}
 		}
-		else
-			cnt = 0;
-
-		player_head = player_head -> next;
+		if(cnt == 3)
+		{
+			isSwing = true;
+			break;
+		}
+		else if(cnt == 4)
+		{
+			isChongtong = true;
+			break;
+		}
+		cnt = 0;
 	}
 	player -> isSwing = isSwing;
 	player -> isChongtong = isChongtong;
