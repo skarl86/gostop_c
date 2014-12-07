@@ -4,41 +4,53 @@
  *  Created on: 2014. 12. 2.
  *      Author: NCri
  */
+#include <stdio.h>
 #include "setting.h"
 
-#define INDEX_OF_BE_GWANG 	44
+#define INDEX_OF_BE_GWANG 	44	// 비광의 인덱스
+#define FIVE_GWANG_SCORE	15	// 5광 점수.
+#define GODORI_SCORE		5	// 고도리 점수.
+#define CHONG_TONG_SCORE	10	// 총통 점수.
+
+bool _isGodori(int index);		// 고도리냐.
+bool _isChodan(int index);		// 초단이냐.
+bool _isHongdan(int index);		// 홍단이냐.
+bool _isChungdan(int index);	// 청단이냐.
 
 // 이 파일에서만 사용하게 될 private 함수들.
 int _cal_gwang(void *player);
 int _cal_pi(void *player);
 int _cal_sip(void *player);
 int _cal_wo(void *player);
+// 십하고 오의 갯수로만 적용되는 점수 계산 방법이 동일하기 때문에 하나의 함수를 이용하는걸로.
+int _cal_sip_and_wo(int count);
 
-void test_show_score(void * player){
+void test_show_score(void * player) {
 	player_info *p_info = (player_info *) player;
 	P_HWATOO head = p_info->head_pae;
 
-	while(head != NULL){
-		printf("%d%s\t",head->isSSangpi, head->name);
+	while (head != NULL) {
+		printf("%d%s\t", head->isSSangpi, head->name);
 		head = head->next;
 	}
 	printf("\n");
-	printf("광 : %d,  피 : %d, 10점수 : %d, 5점수 : %d\n",
-			p_info->score->gwang, p_info->score->pi, p_info->score->sip, p_info->score->wo);
+	printf("광 : %d,  피 : %d, 10점수 : %d, 5점수 : %d\n", p_info->score->gwang,
+			p_info->score->pi, p_info->score->sip, p_info->score->wo);
 
 }
-bool is_win(void * player){
+bool is_win(void * player) {
 	player_info *p_info = (player_info *) player;
 	P_SCORE p_sc = p_info->score;
 	int sum;
 	bool b_is_win = 0;
 	sum = p_sc->gwang + p_sc->pi + p_sc->sip + p_sc->wo;
 
-	if(sum >= 3) // 3점 이상이면 승리.
+	if (sum >= 3) // 3점 이상이면 승리.
 		b_is_win = 1;
 
 	return b_is_win;
 }
+
 int calcurate(void * player) {
 	player_info *p_player_info = (player_info *) player;
 	int sum = 0;
@@ -84,6 +96,62 @@ int calcurate(void * player) {
 	return sum;
 }
 
+int final_score(void * player){
+	player_info *p_info = (player_info *) player;
+	int fin_score = 0;
+
+	// 총통일때.
+	if(p_info->isChongtong){
+		fin_score = CHONG_TONG_SCORE + p_info->total_score;
+	}
+	// 흔들었을때.
+	else if(p_info->isSwing){
+		fin_score = p_info->total_score * 2;
+	}
+	// 나머지의 경우는.
+	else{
+		fin_score = p_info->total_score;
+	}
+
+	return fin_score;
+
+}
+
+
+/* 내부에서만 사용할 함수들.*/
+bool _isGodori(int index) {
+	if (index == 4 || index == 12 || index == 29)
+		return 1;
+	else
+		return 0;
+}
+bool _isChodan(int index) {
+	if (index == 13 || index == 17 || index == 25)
+		return 1;
+	else
+		return 0;
+}
+bool _isHongdan(int index) {
+	if (index == 1 || index == 5 || index == 9)
+		return 1;
+	else
+		return 0;
+}
+bool _isChungdan(int index) {
+	if (index == 21 || index == 33 || index == 37)
+		return 1;
+	else
+		return 0;
+}
+int _cal_sip_and_wo(int count) {
+	if (count == 5) {
+		return 1;
+	} else if (count > 5) {
+		return (count / 5) + (count % 5);
+	} else {
+		return 0;
+	}
+}
 int _cal_gwang(void *player) {
 	player_info *p_player_info = (player_info *) player;
 	P_HWATOO head_pae = p_player_info->head_pae;
@@ -106,7 +174,7 @@ int _cal_gwang(void *player) {
 			p_player_info->score->gwang = count_gwang - 1;
 		else
 			// 5광일 경우 카운트 그대로.
-			p_player_info->score->gwang = count_gwang;
+			p_player_info->score->gwang = FIVE_GWANG_SCORE;
 	} else { // 광이 0~2개 일때는 0점 처리.
 		p_player_info->score->gwang = 0;
 	}
@@ -145,22 +213,24 @@ int _cal_pi(void *player) {
 int _cal_sip(void *player) {
 	player_info *p_player_info = (player_info *) player;
 	P_HWATOO head_pae = p_player_info->head_pae;
-	int count_sip = 0;
+	int count_sip = 0; // 십 카운트.
+	int count_godori = 0; // 고도리 카운트.
 
 	while (head_pae != NULL) {
 		if (!strcmp(head_pae->name, SIP)) {
 			count_sip++;
+			if (_isGodori(head_pae->id))
+				count_godori++;
 		}
 		head_pae = head_pae->next;
 	}
 
-	// 1
-	if (count_sip == 5) {
-		p_player_info->score->sip = 1;
-	} else if (count_sip > 5) {
-		p_player_info->score->sip = (count_sip / 5) + (count_sip % 5);
-	}
+	p_player_info->score->sip = _cal_sip_and_wo(count_sip);
 
+	// 고도리가 떴따!!
+	if (count_godori == 3) {
+		p_player_info->score->sip += GODORI_SCORE;
+	}
 	return p_player_info->score->sip;
 }
 
@@ -179,20 +249,20 @@ int _cal_wo(void *player) {
 			// 초단 : 13, 17, 25
 			// 청단 : 21, 33, 37
 			// 홍단 : 1, 5, 9
-			if (head_pae->id == 13 || head_pae->id == 17
-					|| head_pae->id == 25) {
+			if (_isChodan(head_pae->id)) {
 				count_chodan++;
 			}
-			if (head_pae->id == 21 || head_pae->id == 33
-					|| head_pae->id == 37) {
+			if (_isChungdan(head_pae->id)) {
 				count_chungdan++;
 			}
-			if (head_pae->id == 1 || head_pae->id == 5 || head_pae->id == 9) {
+			if (_isHongdan(head_pae->id)) {
 				count_hongdan++;
 			}
 		}
 		head_pae = head_pae->next;
 	}
+	// 오 점수 계산.
+	p_player_info->score->sip = _cal_sip_and_wo(count_wo);
 
 	// 초단, 홍단, 청단 체크.
 	if (count_chodan == 3) {

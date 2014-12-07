@@ -2,6 +2,10 @@ OBJS = game.o util.o file.o play.o calcurate.o main.o hwatoo_setting.o
 TARGET = gostop
 SOURCES = game.c util.c file.c play.c calcurate.c main.c hwatoo_setting.c
 
+all : clean gostop
+
+clean: 
+	rm -rf $(OBJS) $(TARGET)
 gostop : $(OBJS)
 	gcc -g -o $(TARGET) $(OBJS)
 main.o : setting.h
@@ -18,7 +22,5 @@ util.o : setting.h util.h
 	gcc -c util.c
 game.o : setting.h game.h
 	gcc -c game.c
-clean:
-	rm $(OBJS) $(TARGET)
 debug:
 	gcc -g -o $(TARGET) $(SOURCES) 
