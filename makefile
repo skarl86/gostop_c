@@ -22,5 +22,5 @@ util.o : setting.h util.h
 	gcc -c util.c
 game.o : setting.h game.h
 	gcc -c game.c
-debug:
+debug: clean
 	gcc -g -o $(TARGET) $(SOURCES) 

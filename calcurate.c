@@ -7,11 +7,7 @@
 #include <stdio.h>
 #include "setting.h"
 
-#define INDEX_OF_BE_GWANG 	44	// 비광의 인덱스
-#define FIVE_GWANG_SCORE	15	// 5광 점수.
-#define GODORI_SCORE		5	// 고도리 점수.
-#define CHONG_TONG_SCORE	10	// 총통 점수.
-
+#define INDEX_OF_BE_GWANG 	44	// 비광의 인덱스#define FIVE_GWANG_SCORE	15	// 5광 점수.#define GODORI_SCORE		5	// 고도리 점수.#define CHONG_TONG_SCORE	10	// 총통 점수.#define THREE_GO			3 	// 쓰리 고.
 bool _isGodori(int index);		// 고도리냐.
 bool _isChodan(int index);		// 초단이냐.
 bool _isHongdan(int index);		// 홍단이냐.
@@ -24,6 +20,7 @@ int _cal_sip(void *player);
 int _cal_wo(void *player);
 // 십하고 오의 갯수로만 적용되는 점수 계산 방법이 동일하기 때문에 하나의 함수를 이용하는걸로.
 int _cal_sip_and_wo(int count);
+int _cal_go(void *player);
 
 void test_show_score(void * player) {
 	player_info *p_info = (player_info *) player;
@@ -72,18 +69,21 @@ int calcurate(void * player) {
 	 * 4) 광이 5장이면 15점
 	 */
 	sum += _cal_gwang(player);
+
 	/**
 	 * 피로 점수
 	 * 1) 피를 10장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
 	 * ** 쌍피는 피 2 장으로 계산해야 함
 	 */
 	sum += _cal_pi(player);
+
 	/**
 	 * 10 자리 점
 	 * 1) 10 자리를 5장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
 	 * 2) 고도리는 5점
 	 */
 	sum += _cal_sip(player);
+
 	/*
 	 * 5 자리로 점수
 	 * 1) 5 자리를 5장 모으면 1점이고, 한 장씩 추가될 때마다 1점씩 추가가 됨
@@ -96,28 +96,41 @@ int calcurate(void * player) {
 	return sum;
 }
 
-int final_score(void * player){
+int final_score(void * player) {
 	player_info *p_info = (player_info *) player;
-	int fin_score = 0;
 
 	// 총통일때.
-	if(p_info->isChongtong){
-		fin_score = CHONG_TONG_SCORE + p_info->total_score;
+	if (p_info->isChongtong) {
+		p_info->total_score = CHONG_TONG_SCORE + p_info->total_score;
 	}
 	// 흔들었을때.
-	else if(p_info->isSwing){
-		fin_score = p_info->total_score * 2;
+	else if (p_info->isSwing) {
+		p_info->total_score = p_info->total_score << 1;
 	}
-	// 나머지의 경우는.
-	else{
-		fin_score = p_info->total_score;
+	// GO 했을때.
+	else if (p_info->go_count) {
+		p_info->total_score = _cal_go(player);
 	}
 
-	return fin_score;
-
+	return p_info->total_score;
 }
 
+int _cal_go(void * player) {
+	player_info *p_info = (player_info *) player;
+	int score = 0; // 배수가 적용 된 마지막 점수.
+	int multiple = 0; // 배수.
+	int i;
 
+	if (p_info->go_count < 3)
+		score = p_info->total_score + p_info->go_count;
+	else {
+		multiple = (p_info->go_count / THREE_GO)
+				+ (p_info->go_count % THREE_GO);
+		score = p_info->total_score << multiple;
+	}
+
+	return score;
+}
 /* 내부에서만 사용할 함수들.*/
 bool _isGodori(int index) {
 	if (index == 4 || index == 12 || index == 29)

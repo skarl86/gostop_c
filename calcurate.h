@@ -15,6 +15,7 @@ extern int calcurate(void * player);
 // 플레이어가 났는지 확인.
 extern int is_win(void * player);
 
+// 테스트 코드.
 extern void test_show_score(void * player);
 
 // 최종 게임이 끝난 후 점수.

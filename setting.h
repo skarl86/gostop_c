@@ -46,6 +46,7 @@ typedef struct player_info
 	P_HWATOO head_pae; // 먹은 패.
 	P_SCORE score; // 각각 광,피,10,5 점수.
 	int total_score; // 총 점수.
+	int go_count; // GO 카운트.
 } player_info;
 
 typedef struct game
