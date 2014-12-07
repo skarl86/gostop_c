@@ -55,7 +55,7 @@ P_HWATOO init_pae()
 		"십", "오", "피", "피", "십", "오", "피", "피",
 		"광", "십", "피", "피", "피", "오", "피", "피",
 		"십", "오", "피", "피", "광", "피", "피", "피",
-		"광", "십", "오", "피"}; 
+		"광", "십", "오", "피"};
 
 	for (i = 0; i < 48; i++)
 	{
@@ -179,7 +179,7 @@ P_HWATOO give_pae()
 				prev = head;
 				head = head -> next;
 			}
-			else // 끝까지 돌았는데 못찾은 경우 
+			else // 끝까지 돌았는데 못찾은 경우
 			{
 				randomNum = rand() % 47;
 				head = dummy_head;
@@ -215,12 +215,12 @@ void swing_chongtong_check(player_info *player, P_HWATOO player_head)
 				cnt++;
 			}
 		}
-		if(cnt == 3)
+		if(cnt == 2)
 		{
 			isSwing = true;
 			break;
 		}
-		else if(cnt == 4)
+		else if(cnt == 3)
 		{
 			isChongtong = true;
 			break;

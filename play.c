@@ -250,7 +250,7 @@ void matchPae(P_HWATOO output,player_info * info )
 	{
 		PAE_head = appendList(PAE_head,match);	
 	}
-	else
+	else if(count != 0) //바닥에 해딩하는 경우.
 	{
 		//먹는 경우
 		// 만약 싼걸 먹거나, 따닥 일 경우 상대방의 패를 빼온다.
