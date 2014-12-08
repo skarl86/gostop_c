@@ -47,12 +47,9 @@ typedef struct player_info
 	P_SCORE score; // 각각 광,피,10,5 점수.
 	int total_score; // 총 점수.
 	int go_count; // GO 카운트.
+	int total_score_when_go; // GO했을때 점수.
+	int money; // 사용자 돈.
 } player_info;
-
-typedef struct game
-{
-	char winner[2];
-}GAME, *P_GAME;
 
 void init();
 P_HWATOO init_pae();

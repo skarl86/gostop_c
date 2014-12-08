@@ -1,10 +1,12 @@
 #include "setting.h"
 #include "calcurate.h"
+//#include "game.h"
 
 /* 전역 변수 선언 */
 P_HWATOO head = NULL; // 화투더미
 P_HWATOO A_head = NULL, B_head = NULL, C_head = NULL, PAE_head = NULL; // 사용자 패
 player_info A_player, B_player, C_player; // 사용자 정보
+
 char winner = 'A';
 
 int main() {
@@ -66,9 +68,9 @@ void start_play(char input, int cmd) {
 		call_show_pae();
 		//더미패에서 뒤집은거에 관한 처리
 
-		// 승리했다면.
+		// 승리조건이 성립한다면.
 		if (is_win(&A_player)) {
-			// 승리했을 때 처리 부탁.
+			// 고 또는 스톱 처리 부탁.
 		}
 	} else if (input == 'B') {
 		/* 사용자가 낸패의 관한 처리 */
@@ -89,9 +91,9 @@ void start_play(char input, int cmd) {
 		call_show_pae();
 		//더미패에서 뒤집은거에 관한 처리
 
-		// 승리했다면.
-		if (is_win(&B_player)) {
-			// 승리했을 때 처리 부탁.
+		// 승리조건이 성립한다면.
+		if (is_win(&A_player)) {
+			// 고 또는 스톱 처리 부탁.
 		}
 
 	} else if (input == 'C') {
@@ -113,9 +115,9 @@ void start_play(char input, int cmd) {
 		call_show_pae();
 		//더미패에서 뒤집은거에 관한 처리
 
-		// 승리했다면.
-		if (is_win(&C_player)) {
-			// 승리했을 때 처리 부탁.
+		// 승리조건이 성립한다면.
+		if (is_win(&A_player)) {
+			// 고 또는 스톱 처리 부탁.
 		}
 	}
 
