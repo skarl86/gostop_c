@@ -151,16 +151,21 @@ int update_player_score_and_money(void * winner, void * loser1, void * loser2) {
 	if (p_winner->isChongtong) {
 		p_winner->total_score = CHONG_TONG_SCORE + p_winner->total_score;
 	} else { // 그 외의 배수 계산.
+		printf("플레이어(%c) ", p_loser1->id[0]);
 		loser1_score = _cal_final_score(winner, loser1);
+		printf("점수 (%d)\n", loser1_score);
 		loser1_money = loser1_score * SCORE_PER_MONEY;
+
+		printf("플레이어(%c) ", p_loser2->id[0]);
 		loser2_score = _cal_final_score(winner, loser2);
+		printf("점수 (%d)\n", loser2_score);
 		loser2_money = loser2_score * SCORE_PER_MONEY;
 
 		// 패배 플레이어의 돈에서 돈을 빼온다.
 		winner_money = winner_money
-				+ _update_player_money(p_loser1, loser1_money);
+				+ _update_player_money(loser1, loser1_money);
 		winner_money = winner_money
-				+ _update_player_money(p_loser2, loser2_money);
+				+ _update_player_money(loser2, loser2_money);
 	}
 	return p_winner->total_score;
 }
@@ -221,6 +226,7 @@ int _update_player_money(void * player, int losed_money) {
 	return money;
 }
 int _cal_loser_multiple(int win_score, MULTIPLE type) {
+	printf(" 배수 : (%d) ",type);
 	while (type > 0) {
 		if (type & MULTIPLE_MASK) {
 			// 점수의 배수 적용.
@@ -279,15 +285,15 @@ bool _isPibak(void * player) {
 }
 bool _isGwangbak(void * player) {
 	player_info * p_info = (player_info *) player;
-	if (p_info->score->gwang < GWANG_BAK_COUNT)
+	if (p_info->score->gwang == 0)
 		return 1;
 	return 0;
 }
 bool _isGobak(void * player) {
 	player_info * p_info = (player_info *) player;
 	if (p_info->go_count > 0)
-		return 0;
-	return 1;
+		return 1;
+	return 0;
 }
 bool _isMungtung(void * player) {
 	player_info * p_info = (player_info *) player;
@@ -322,11 +328,13 @@ int _update_gwang_score(void *player) {
 
 	if (count_gwang >= 3) { // 광이 3~5일때.
 		// 비광이 포함된 상태에서 5점 미만 일 경우 -1.
-		if (has_be_gwang && count_gwang < 5)
+		if (has_be_gwang)
 			p_player_info->score->gwang = count_gwang - 1;
-		else
+		else if(count_gwang == 5)
 			// 5광일 경우 카운트 그대로.
 			p_player_info->score->gwang = FIVE_GWANG_SCORE;
+		else
+			p_player_info->score->gwang = count_gwang;
 	} else { // 광이 0~2개 일때는 0점 처리.
 		p_player_info->score->gwang = 0;
 	}
@@ -378,7 +386,7 @@ int _update_sip_count(player_info * player) {
 		}
 		temp = temp->next;
 	}
-	printf("escape\n");
+//	printf("escape\n");
 
 	player->score->sip = _cal_sip_and_wo(count_sip);
 
