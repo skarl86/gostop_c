@@ -45,7 +45,22 @@ int main() {
 	printf("고스톱이 종료되었습니다.\n");
 	return 0;
 }
+int select_go_stop()
+{
+	int input;
+	printf("고 하시겠습니까?(g: Go s: Stop)\n");
+	getchar();
+	while(1)
+	{
+		input = getchar();
+		if(input ==  'g')
+			return 1;
+		else if(input == 's')
+			return 0;
+		printf("잘못 입력하셨습니다. \n ");
+	}
 
+}
 //플레이 하게 하는 함수
 void start_play(char input, int cmd) {
 	P_HWATOO p = NULL, up_p = NULL;
@@ -56,21 +71,30 @@ void start_play(char input, int cmd) {
 		matchPae(p, &A_player);
 		//사용자가 낸패의 관한 처리
 
+		calcurate(&A_player);
 		/*더미패에서 뒤집은거에 관한 처리 */
-		//up_p = selectPae(head,1);
-		//printf("뒤집은 패 정보월 : %d 이름 %s\n",up_p-> no,up_p -> name);
-		//head = cutList(head,up_p,1);
-		//matchPae(up_p,&A_player);
-		winner = 'B';	//다음순번 정하기
 
 		// 계산 후 show를 해야한다. 꼭!! 이유는 계산이 끝나야 플레이어 점수가 갱신되기 때문.
-		calcurate(&A_player);
-		call_show_pae();
 		//더미패에서 뒤집은거에 관한 처리
 
 		// 승리조건이 성립한다면.
 		if (is_win(&A_player)) {
 			// 고 또는 스톱 처리 부탁.
+			if(!select_go_stop())
+			{
+				init();
+				call_show_pae();
+			}
+			else
+			{
+				winner = 'B';
+				call_show_pae();
+			}
+		}
+		else
+		{
+			winner = 'B';
+			call_show_pae();
 		}
 	} else if (input == 'B') {
 		/* 사용자가 낸패의 관한 처리 */
@@ -79,21 +103,29 @@ void start_play(char input, int cmd) {
 		matchPae(p, &B_player);
 		//사용자가 낸패의 관한 처리
 
-		/*더미패에서 뒤집은거에 관한 처리 */
-		//up_p = selectPae(head,1);
-		//printf("뒤집은 패 정보월 : %d 이름 %s\n",up_p-> no,up_p -> name);
-		//head = cutList(head,up_p,1);
-		//matchPae(up_p,&B_player);
-		winner = 'C';
 
 		// 계산 후 show를 해야한다. 꼭!! 이유는 계산이 끝나야 플레이어 점수가 갱신되기 때문.
 		calcurate(&B_player);
-		call_show_pae();
 		//더미패에서 뒤집은거에 관한 처리
 
 		// 승리조건이 성립한다면.
-		if (is_win(&A_player)) {
+		if (is_win(&B_player)) {
 			// 고 또는 스톱 처리 부탁.
+			if(!select_go_stop())
+			{
+				init();
+				call_show_pae();
+			}
+			else
+			{
+				winner = 'C';
+				call_show_pae();
+			}
+		}
+		else
+		{
+			winner = 'C';
+			call_show_pae();
 		}
 
 	} else if (input == 'C') {
@@ -103,21 +135,29 @@ void start_play(char input, int cmd) {
 		matchPae(p, &C_player);
 		//사용자가 낸패의 관한 처리
 
-		/*더미패에서 뒤집은거에 관한 처리 */
-		//up_p = selectPae(head,1);
-		//printf("뒤집은 패 정보월 : %d 이름 %s\n",up_p-> no,up_p -> name);
-		//head = cutList(head,up_p,1);
-		//matchPae(up_p,&C_player);
-		winner = 'A';
 
 		// 계산 후 show를 해야한다. 꼭!! 이유는 계산이 끝나야 플레이어 점수가 갱신되기 때문.
 		calcurate(&C_player);
-		call_show_pae();
 		//더미패에서 뒤집은거에 관한 처리
 
 		// 승리조건이 성립한다면.
-		if (is_win(&A_player)) {
+		if (is_win(&C_player)) {
 			// 고 또는 스톱 처리 부탁.
+			if(!select_go_stop())
+			{
+				init();
+				call_show_pae();
+			}
+			else
+			{
+				winner = 'A';
+				call_show_pae();
+			}
+		}
+		else
+		{
+			winner = 'A';
+			call_show_pae();
 		}
 	}
 
