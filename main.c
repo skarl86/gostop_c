@@ -45,17 +45,15 @@ int main() {
 	printf("고스톱이 종료되었습니다.\n");
 	return 0;
 }
-int select_go_stop()
-{
+int select_go_stop() {
 	int input;
 	printf("고 하시겠습니까?(g: Go s: Stop)\n");
 	getchar();
-	while(1)
-	{
+	while (1) {
 		input = getchar();
-		if(input ==  'g')
+		if (input == 'g')
 			return 1;
-		else if(input == 's')
+		else if (input == 's')
 			return 0;
 		printf("잘못 입력하셨습니다. \n ");
 	}
@@ -76,23 +74,20 @@ void start_play(char input, int cmd) {
 
 		// 계산 후 show를 해야한다. 꼭!! 이유는 계산이 끝나야 플레이어 점수가 갱신되기 때문.
 		//더미패에서 뒤집은거에 관한 처리
-
 		// 승리조건이 성립한다면.
 		if (is_win(&A_player)) {
 			// 고 또는 스톱 처리 부탁.
-			if(!select_go_stop())
-			{
+			if (!select_go_stop()) {
+				printf("최종 승리점수 : %d\n",
+						update_player_score_and_money(&A_player, &B_player,
+								&C_player));
 				init();
 				call_show_pae();
-			}
-			else
-			{
+			} else {
 				winner = 'B';
 				call_show_pae();
 			}
-		}
-		else
-		{
+		} else {
 			winner = 'B';
 			call_show_pae();
 		}
@@ -103,7 +98,6 @@ void start_play(char input, int cmd) {
 		matchPae(p, &B_player);
 		//사용자가 낸패의 관한 처리
 
-
 		// 계산 후 show를 해야한다. 꼭!! 이유는 계산이 끝나야 플레이어 점수가 갱신되기 때문.
 		calcurate(&B_player);
 		//더미패에서 뒤집은거에 관한 처리
@@ -111,19 +105,17 @@ void start_play(char input, int cmd) {
 		// 승리조건이 성립한다면.
 		if (is_win(&B_player)) {
 			// 고 또는 스톱 처리 부탁.
-			if(!select_go_stop())
-			{
+			if (!select_go_stop()) {
+				printf("최종 승리점수 : %d\n",
+						update_player_score_and_money(&B_player, &A_player,
+								&C_player));
 				init();
 				call_show_pae();
-			}
-			else
-			{
+			} else {
 				winner = 'C';
 				call_show_pae();
 			}
-		}
-		else
-		{
+		} else {
 			winner = 'C';
 			call_show_pae();
 		}
@@ -135,7 +127,6 @@ void start_play(char input, int cmd) {
 		matchPae(p, &C_player);
 		//사용자가 낸패의 관한 처리
 
-
 		// 계산 후 show를 해야한다. 꼭!! 이유는 계산이 끝나야 플레이어 점수가 갱신되기 때문.
 		calcurate(&C_player);
 		//더미패에서 뒤집은거에 관한 처리
@@ -143,19 +134,18 @@ void start_play(char input, int cmd) {
 		// 승리조건이 성립한다면.
 		if (is_win(&C_player)) {
 			// 고 또는 스톱 처리 부탁.
-			if(!select_go_stop())
-			{
+			if (!select_go_stop()) {		// 스톱.
+				printf("최종 승리점수 : %d\n",
+						update_player_score_and_money(&C_player, &A_player,
+								&B_player));
 				init();
 				call_show_pae();
-			}
-			else
+			} else // 고.
 			{
 				winner = 'A';
 				call_show_pae();
 			}
-		}
-		else
-		{
+		} else {
 			winner = 'A';
 			call_show_pae();
 		}

@@ -11,6 +11,9 @@ void init() {
 	/* 게임 정보 초기화 */
 //	m_game_info = (P_GAME) malloc(sizeof(GAME));
 //	m_game_info->winner_score = 0;
+	reset_score(&A_player);
+	reset_score(&B_player);
+	reset_score(&C_player);
 
 	/* 플레이어 초기화.*/
 	A_player.id[0] = 'A';
