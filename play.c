@@ -199,8 +199,7 @@ P_HWATOO appendMatch(P_HWATOO match,P_HWATOO output,int * count)
 	}
 	else if(*count == 0)
 	{
-		PAE_head = appendList(PAE_head,output);	//바닥패에 낸패 붙이기
-		PAE_head = sortList(PAE_head);
+		PAE_head = appendList(PAE_head, output);
 		return NULL;
 	}
 	else	//3개인 경우
@@ -233,7 +232,23 @@ void matchPae(P_HWATOO output,player_info * info )
 	count = 0;	
 	up_match = countMatch(up_pae, &count);
 
-	up_match = appendMatch(up_match,up_pae,&count);
+	if(count == 0)	//쌀수도 있는  경우
+	{
+
+		if(match != NULL && match -> no == up_pae -> no)	//싼경우
+		{
+			match = appendList(match,up_pae);
+
+		}
+		else	//안싼경우
+		{
+			up_match = appendMatch(up_match,up_pae,&count);
+		}
+	}
+	else//싸지 않은경우
+	{	
+		up_match = appendMatch(up_match,up_pae,&count);
+	}
 	
 	match = appendList(match, up_match);
 	//match 는 짝이 맞는 모든 화투패
@@ -248,9 +263,16 @@ void matchPae(P_HWATOO output,player_info * info )
 	//
 	if(count == 3)
 	{
-		PAE_head = appendList(PAE_head,match);	
+		PAE_head = appendList(PAE_head,match);
+		PAE_head = sortList(PAE_head);
+		printf("쌈\n\n");	
 	}
-	else if(count != 0) //바닥에 해딩하는 경우.
+	else if(count == 0)	//바닥에 해딩
+	{
+		PAE_head = appendList(PAE_head,match);
+		PAE_head = sortList(PAE_head);
+	}
+	else
 	{
 		//먹는 경우
 		// 만약 싼걸 먹거나, 따닥 일 경우 상대방의 패를 빼온다.
@@ -260,6 +282,7 @@ void matchPae(P_HWATOO output,player_info * info )
 			// '피' 패를 가져온다.
 			count = 0;
 			temp = match;
+			temp - sortList(temp);
 			while(temp -> next != NULL)
 			{
 				if(temp -> no == temp -> next -> no)
@@ -270,7 +293,7 @@ void matchPae(P_HWATOO output,player_info * info )
 			}
 			if(count == 3)
 			{
-				info -> head_pae = appendList(info->head_pae, steal_pi(info));
+				//info -> head_pae = appendList(info->head_pae, steal_pi(info));
 			}
 		}
 
