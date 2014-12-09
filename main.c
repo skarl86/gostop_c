@@ -77,13 +77,14 @@ void start_play(char input, int cmd) {
 		// 승리조건이 성립한다면.
 		if (is_win(&A_player)) {
 			// 고 또는 스톱 처리 부탁.
-			if (!select_go_stop()) {
+			if (!select_go_stop()) { //스톱..
 				printf("최종 승리점수 : %d\n",
 						update_player_score_and_money(&A_player, &B_player,
 								&C_player));
 				init();
 				call_show_pae();
-			} else {
+			} else { //고..
+
 				winner = 'B';
 				call_show_pae();
 			}

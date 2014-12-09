@@ -67,13 +67,10 @@ void reset_score(void * player) {
 }
 bool is_win(void * player) {
 	player_info *p_info = (player_info *) player;
-	P_SCORE p_sc = p_info->score;
 	int sum = 0;
 	bool b_is_win = 0;
 
-	sum = p_sc->gwang + p_sc->pi + p_sc->sip + p_sc->wo;
-
-	if (sum >= 3) { // 3점 이상이면 승리.
+	if (p_info->total_score >= 3) { // 3점 이상이면 승리.
 		// 플레이어가 GO를 했을 때 점수보다 높아야 다시 GO를 할 수 있다.
 		// 이 경우는 플레이어가 GO를 하고 나서
 		// 다른 플레이어에게 피를 뺏겨 점수가 떨어졌을때를.
@@ -153,12 +150,12 @@ int update_player_score_and_money(void * winner, void * loser1, void * loser2) {
 	} else { // 그 외의 배수 계산.
 		printf("플레이어(%c) ", p_loser1->id[0]);
 		loser1_score = _cal_final_score(winner, loser1);
-		printf("점수 (%d)\n", loser1_score);
+		printf("점수 (%d) 피 : (%d) 광 : (%d) \n", loser1_score, p_loser1->score->pi, p_loser1->score->gwang);
 		loser1_money = loser1_score * SCORE_PER_MONEY;
 
 		printf("플레이어(%c) ", p_loser2->id[0]);
 		loser2_score = _cal_final_score(winner, loser2);
-		printf("점수 (%d)\n", loser2_score);
+		printf("점수 (%d) 피 : (%d) 광 : (%d) \n", loser2_score, p_loser2->score->pi, p_loser2->score->gwang);
 		loser2_money = loser2_score * SCORE_PER_MONEY;
 
 		// 패배 플레이어의 돈에서 돈을 빼온다.
@@ -166,6 +163,10 @@ int update_player_score_and_money(void * winner, void * loser1, void * loser2) {
 				+ _update_player_money(loser1, loser1_money);
 		winner_money = winner_money
 				+ _update_player_money(loser2, loser2_money);
+
+		// 승리자에게 돈을 갱신해준다.
+		p_winner->money += winner_money;
+		printf("승자 플레이어(%c) 획득 돈 : (%d)\n",p_winner->id[0], winner_money);
 	}
 	return p_winner->total_score;
 }
@@ -177,13 +178,13 @@ int _cal_final_score(void * winner, void * loser) {
 
 	int winner_score = p_winner->total_score; // 승리 플레이어의 배수 적용전 기본 점수.
 
-	if (p_winner->score->pi >= 10) {
+	if (p_winner->score->pi >= 1) {
 		// 피박.
 		if (_isPibak(loser))
 			multi |= PI_BAK;
 	}
 	// 광로 났을때.
-	if (p_winner->score->gwang >= 3) {
+	if (p_winner->score->gwang >= 2) {
 		// 광박.
 		if (_isGwangbak(loser)) {
 			multi |= GWANG_BAK;
@@ -221,7 +222,9 @@ int _update_player_money(void * player, int losed_money) {
 		// 소유한 돈이 잃을 돈 보다 적기때문에 0원 처리.
 		p_player->money = 0;
 	} else {
-		money = p_player->money - losed_money;
+		// 자신의 소유한 돈에서 잃을 돈을 빼준다.
+		p_player->money = p_player->money - losed_money;
+		money = losed_money;
 	}
 	return money;
 }
@@ -279,13 +282,22 @@ bool _isChungdan(int index) {
 }
 bool _isPibak(void * player) {
 	player_info * p_info = (player_info *) player;
-	if (p_info->score->pi < PI_BAK_COUNT)
+	if (p_info->score->pi == 0)
 		return 1;
 	return 0;
 }
 bool _isGwangbak(void * player) {
 	player_info * p_info = (player_info *) player;
-	if (p_info->score->gwang == 0)
+	P_HWATOO p_ht = p_info->head_pae;
+	int count = 0;
+
+	while(p_ht != NULL){
+		if(!strcmp(p_ht->name, GWANG))
+			count++;
+		p_ht = p_ht->next;
+	}
+
+	if(count == 0)
 		return 1;
 	return 0;
 }
@@ -392,6 +404,7 @@ int _update_sip_count(player_info * player) {
 
 	// 고도리가 떴따!!
 	if (count_godori == 3) {
+		printf("고도리떴따!!!!!!!!!!\n");
 		player->score->sip += GODORI_SCORE;
 	}
 	return player->score->sip;

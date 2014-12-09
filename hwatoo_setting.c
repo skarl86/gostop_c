@@ -19,6 +19,10 @@ void init() {
 	A_player.id[0] = 'A';
 	B_player.id[0] = 'B';
 	C_player.id[0] = 'C';
+	// 돈.
+	A_player.money = 100000;
+	B_player.money = 100000;
+	C_player.money = 100000;
 
 	//player정보 초기화
 	A_player.head_pae = NULL;
