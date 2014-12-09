@@ -6,6 +6,7 @@ void init() {
 	extern player_info A_player, B_player, C_player;
 	extern P_HWATOO A_head, B_head, C_head, PAE_head;
 	extern winner;
+	P_HWATOO temp;
 //	extern P_GAME m_game_info;
 
 	/* 게임 정보 초기화 */
@@ -32,6 +33,12 @@ void init() {
 	B_head = give_pae(); // B에게 패돌리기
 	C_head = give_pae(); // C에게 패돌리기
 	PAE_head = give_pae(); //패 깔기
+	//바닥패에 하나를 더미패에 넣기
+	temp = PAE_head -> next;
+	PAE_head -> next = NULL;
+	PAE_head -> next = head;
+	head = PAE_head;
+	PAE_head = temp;
 
 	/* 흔들기와 총통 체크 함수 호출 */
 	//swing_chongtong_check(&A_player, A_head);
