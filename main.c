@@ -33,12 +33,18 @@ int main() {
 		} else if (*cmd == 57 && strlen(cmd) == 1) {
 			printf("7이상의 숫자 입력");
 		} else if (!strcmp(cmd, "save"))
-			printf("저장\n");
+			save(A_head,B_head,C_head,PAE_head,&A_player,&B_player,&C_player);
 		else if (!strcmp(cmd, "load"))
-			printf("로드\n");
+			load(A_head,B_head,C_head,PAE_head,&A_player,&B_player,&C_player);
 		else
 			printf("잘못입력하셨습니다.\n");
 
+		if(A_head == NULL && B_head == NULL && C_head == NULL)
+		{
+			//모든 패를 낸후 게임 재시작 사용자 정보및 기타 초기화 작업		
+			init();
+			call_show_pae();
+		}
 		printf("명령 : ");
 		scanf("%s", cmd);
 	}
@@ -160,7 +166,8 @@ void call_show_pae() {
 	show_ex_pae(C_head, OWN_PAE, &C_player); // C 플레이어 가진 패 출력.
 
 	show_ex_pae(PAE_head, PLACE_PAE, NULL); // 깔린 패 출력
-
+	show_ex_pae(head, PLACE_PAE, NULL); //더미 패 출력
+	
 	show_ex_pae(A_player.head_pae, GET_PAE, &A_player); // A플레이어 먹은 패 출력.
 	show_ex_pae(B_player.head_pae, GET_PAE, &B_player); // A플레이어 먹은 패 출력.
 	show_ex_pae(C_player.head_pae, GET_PAE, &C_player); // A플레이어 먹은 패 출력.
