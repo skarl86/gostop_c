@@ -170,8 +170,8 @@ P_HWATOO appendMatch(P_HWATOO match,P_HWATOO output,int * count)
 		printf("다음중 패 하나를 선택하세요\n");
 		while(1)
 		{
-			printf("1) %d %s\n", match -> no, match -> name);
-			printf("2) %d %s\n", match -> next -> no, match -> next -> name);
+			printf("1) %d %s(%d)\n", match -> no, match -> name, match -> isSSangpi);
+			printf("2) %d %s(%d)\n", match -> next -> no, match -> next -> name, match -> next -> isSSangpi);
 			scanf("%d",&cmd);
 			if(cmd == 1)
 			{
@@ -228,7 +228,7 @@ void matchPae(P_HWATOO output,player_info * info )
 	up_pae = selectPae(head,1);
 	head = cutList(head,up_pae,1);
 
-	printf("뒤집은 패 번호 : %d 이름 : %s\n",up_pae->no, up_pae->name);
+	printf("뒤집은 패 번호 : %d 이름 : %s(%d)\n",up_pae->no, up_pae->name, up_pae->isSSangpi);
 	count = 0;	
 	up_match = countMatch(up_pae, &count);
 
@@ -265,7 +265,7 @@ void matchPae(P_HWATOO output,player_info * info )
 	{
 		PAE_head = appendList(PAE_head,match);
 		PAE_head = sortList(PAE_head);
-		printf("쌈\n\n");	
+		printf("쌈\n\n");
 	}
 	else if(count == 0)	//바닥에 해딩
 	{

@@ -20,10 +20,6 @@ void init() {
 	A_player.id[0] = 'A';
 	B_player.id[0] = 'B';
 	C_player.id[0] = 'C';
-	// 돈.
-	A_player.money = 100000;
-	B_player.money = 100000;
-	C_player.money = 100000;
 
 	//player정보 초기화
 	A_player.head_pae = NULL;
@@ -38,9 +34,9 @@ void init() {
 	C_head = give_pae(); // C에게 패돌리기
 	PAE_head = give_pae(); //패 깔기
 	//바닥패에 하나를 더미패에 넣기
-	temp = PAE_head -> next;
-	PAE_head -> next = NULL;
-	PAE_head -> next = head;
+	temp = PAE_head->next;
+	PAE_head->next = NULL;
+	PAE_head->next = head;
 	head = PAE_head;
 	PAE_head = temp;
 

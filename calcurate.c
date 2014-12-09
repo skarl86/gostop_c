@@ -7,12 +7,7 @@
 #include <stdio.h>
 #include "setting.h"
 
-#define PI_BAK_COUNT		9	// 피박 조건.#define GWANG_BAK_COUNT		0	// 광박 조건.#define MUNGTUNG_COUNT		7	// 멍텅구리 조건.#define INDEX_OF_BE_GWANG 	44	// 비광의 인덱스#define FIVE_GWANG_SCORE	15	// 5광 점수.#define GODORI_SCORE		5	// 고도리 점수.#define CHONG_TONG_SCORE	10	// 총통 점수.#define THREE_GO			3 	// 쓰리 고.#define SCORE_PER_MONEY		100	// 1점 당 머니.// 배수를 확인할 16진수 값들.typedef enum multiple {
-	GO_BAK = 0x2, PI_BAK = 0x4, GWANG_BAK = 0x8, SWING = 0x10, MUNG_BAK = 0x20
-} MULTIPLE;
-const int MULTIPLE_MASK = 0x1; // 배수를 확인할 마스크 값.
-
-// 이 파일에서만 사용하게 될 private 함수들.
+#define PI_BAK_COUNT		9	// 피박 조건.#define GWANG_BAK_COUNT		0	// 광박 조건.#define MUNGTUNG_COUNT		7	// 멍텅구리 조건.#define INDEX_OF_BE_GWANG 	44	// 비광의 인덱스#define FIVE_GWANG_SCORE	15	// 5광 점수.#define GODORI_SCORE		5	// 고도리 점수.#define CHONG_TONG_SCORE	10	// 총통 점수.#define THREE_GO			3 	// 쓰리 고.#define SCORE_PER_MONEY		100	// 1점 당 머니.// 배수를 확인할 16진수 값들.typedef enum multiple {GO_BAK = 0x2, PI_BAK = 0x4, GWANG_BAK = 0x8, SWING = 0x10, MUNG_BAK = 0x20}MULTIPLE;const int MULTIPLE_MASK = 0x1; // 배수를 확인할 마스크 값.// 이 파일에서만 사용하게 될 private 함수들.
 // update로 시작하는 함수는 전달 받은 포인터의 값을 직접 갱신하는 함수들.
 // 그 외에는 전달 받은 값을 참조하거나 이용해서 갱신없이 값만 반환.
 
@@ -145,29 +140,41 @@ int update_player_score_and_money(void * winner, void * loser1, void * loser2) {
 
 	// 총통일때는 10점을 주고 게임 끝.
 	// 배수 계산을 하지 않는다.
+	printf("피 (%d) 광 (%d) 십 (%d) 오 (%d)\n\n",
+			p_winner->score->pi,
+			p_winner->score->gwang,
+			p_winner->score->sip,
+			p_winner->score->wo);
 	if (p_winner->isChongtong) {
-		p_winner->total_score = CHONG_TONG_SCORE + p_winner->total_score;
+		p_winner->total_score = CHONG_TONG_SCORE;
 	} else { // 그 외의 배수 계산.
+		printf("==============================================================\n");
 		printf("플레이어(%c) ", p_loser1->id[0]);
 		loser1_score = _cal_final_score(winner, loser1);
-		printf("점수 (%d) 피 : (%d) 광 : (%d) \n", loser1_score, p_loser1->score->pi, p_loser1->score->gwang);
+		printf("잃은 점수 (%d)\n\n", loser1_score);
 		loser1_money = loser1_score * SCORE_PER_MONEY;
 
 		printf("플레이어(%c) ", p_loser2->id[0]);
 		loser2_score = _cal_final_score(winner, loser2);
-		printf("점수 (%d) 피 : (%d) 광 : (%d) \n", loser2_score, p_loser2->score->pi, p_loser2->score->gwang);
+		printf("잃은 점수 (%d)\n\n", loser2_score);
 		loser2_money = loser2_score * SCORE_PER_MONEY;
-
 		// 패배 플레이어의 돈에서 돈을 빼온다.
 		winner_money = winner_money
 				+ _update_player_money(loser1, loser1_money);
 		winner_money = winner_money
 				+ _update_player_money(loser2, loser2_money);
-
 		// 승리자에게 돈을 갱신해준다.
 		p_winner->money += winner_money;
-		printf("승자 플레이어(%c) 획득 돈 : (%d)\n",p_winner->id[0], winner_money);
+		printf("승자 플레이어(%c) 획득 돈 : (%d)\n\n", p_winner->id[0], winner_money);
+		printf("현재 금액  %c(%d), %c(%d), %c(%d)\n\n",
+				p_winner->id[0], p_winner->money,
+				p_loser1->id[0], p_loser1->money,
+				p_loser2->id[0], p_loser2->money);
 	}
+	printf("최종 승자 피(%d)광(%d)십(%d)오(%d)\n\n", p_winner->score->pi,
+			p_winner->score->gwang, p_winner->score->sip, p_winner->score->wo);
+	printf("최종 승리점수 : (%d)\n", p_winner->total_score);
+	printf("==============================================================\n\n");
 	return p_winner->total_score;
 }
 int _cal_final_score(void * winner, void * loser) {
@@ -202,7 +209,7 @@ int _cal_final_score(void * winner, void * loser) {
 	if (_isGobak(loser)) {
 		multi |= GO_BAK;
 	}
-
+//	printf("기본 점수 : (%d)\n", winner_score);
 	winner_score = _cal_loser_multiple(winner_score, multi);
 
 	// 모든 배수를 적용한 이후에 GO 배수를 적용한다.
@@ -229,14 +236,16 @@ int _update_player_money(void * player, int losed_money) {
 	return money;
 }
 int _cal_loser_multiple(int win_score, MULTIPLE type) {
-	printf(" 배수 : (%d) ",type);
+	int count = 1;
 	while (type > 0) {
 		if (type & MULTIPLE_MASK) {
 			// 점수의 배수 적용.
+			count++;
 			win_score = win_score << 1;
 		}
 		type = type >> 1;
 	}
+	printf("배수 : (%d) ", count);
 	return win_score;
 }
 int _cal_go(void * player) {
@@ -282,8 +291,23 @@ bool _isChungdan(int index) {
 }
 bool _isPibak(void * player) {
 	player_info * p_info = (player_info *) player;
-	if (p_info->score->pi == 0)
+	P_HWATOO p_ht = p_info->head_pae;
+	int count = 0;
+
+	while (p_ht != NULL) {
+		if (!strcmp(p_ht->name, PI)){
+			count++;
+			// 쌍피면?.
+			if(p_ht->isSSangpi){
+				count++;
+			}
+		}
+		p_ht = p_ht->next;
+	}
+
+	if (count <= 5){
 		return 1;
+	}
 	return 0;
 }
 bool _isGwangbak(void * player) {
@@ -291,19 +315,19 @@ bool _isGwangbak(void * player) {
 	P_HWATOO p_ht = p_info->head_pae;
 	int count = 0;
 
-	while(p_ht != NULL){
-		if(!strcmp(p_ht->name, GWANG))
+	while (p_ht != NULL) {
+		if (!strcmp(p_ht->name, GWANG))
 			count++;
 		p_ht = p_ht->next;
 	}
 
-	if(count == 0)
+	if (count == 0)
 		return 1;
 	return 0;
 }
 bool _isGobak(void * player) {
 	player_info * p_info = (player_info *) player;
-	if (p_info->go_count > 0)
+	if (p_info->go_count >= 1)
 		return 1;
 	return 0;
 }
@@ -333,20 +357,27 @@ int _update_gwang_score(void *player) {
 			// 비광일 존재할 경우.
 			has_be_gwang = 1;
 		}
-		if (!strcmp(head_pae->name, GWANG))
+		if (!strcmp(head_pae->name, GWANG)) {
 			count_gwang++;
+		}
 		head_pae = head_pae->next;
 	}
 
 	if (count_gwang >= 3) { // 광이 3~5일때.
 		// 비광이 포함된 상태에서 5점 미만 일 경우 -1.
-		if (has_be_gwang)
-			p_player_info->score->gwang = count_gwang - 1;
-		else if(count_gwang == 5)
+		if (has_be_gwang) {
+			if (count_gwang == 3) {
+				p_player_info->score->gwang = count_gwang - 1;
+			} else {
+				p_player_info->score->gwang = count_gwang;
+			}
+
+		} else if (count_gwang == 5) {
 			// 5광일 경우 카운트 그대로.
 			p_player_info->score->gwang = FIVE_GWANG_SCORE;
-		else
+		} else {
 			p_player_info->score->gwang = count_gwang;
+		}
 	} else { // 광이 0~2개 일때는 0점 처리.
 		p_player_info->score->gwang = 0;
 	}
@@ -391,7 +422,7 @@ int _update_sip_count(player_info * player) {
 //		printf("while!!!\n");
 		if (!strcmp(temp->name, SIP)) {
 			count_sip++;
-			if (_isGodori(temp->id)){
+			if (_isGodori(temp->id)) {
 //				printf("godory!!!(%d)", count_godori);
 				count_godori++;
 			}
@@ -404,7 +435,7 @@ int _update_sip_count(player_info * player) {
 
 	// 고도리가 떴따!!
 	if (count_godori == 3) {
-		printf("고도리떴따!!!!!!!!!!\n");
+//		printf("고도리떴따!!!!!!!!!!\n");
 		player->score->sip += GODORI_SCORE;
 	}
 	return player->score->sip;
@@ -438,7 +469,7 @@ int _update_wo_count(void *player) {
 		head_pae = head_pae->next;
 	}
 	// 오 점수 계산.
-	p_player_info->score->sip = _cal_sip_and_wo(count_wo);
+	p_player_info->score->wo = _cal_sip_and_wo(count_wo);
 
 	// 초단, 홍단, 청단 체크.
 	if (count_chodan == 3) {

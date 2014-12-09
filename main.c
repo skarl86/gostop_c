@@ -13,6 +13,11 @@ int main() {
 	char cmd[5] = "\0"; // 명령어 변수
 	srand((unsigned) time(NULL));
 
+	// 돈.
+	A_player.money = 100000;
+	B_player.money = 100000;
+	C_player.money = 100000;
+
 	init(); // 패 셋팅
 	call_show_pae(); // 패 출력
 
@@ -33,15 +38,16 @@ int main() {
 		} else if (*cmd == 57 && strlen(cmd) == 1) {
 			printf("7이상의 숫자 입력");
 		} else if (!strcmp(cmd, "save"))
-			save(A_head,B_head,C_head,PAE_head,&A_player,&B_player,&C_player);
+			save(A_head, B_head, C_head, PAE_head, &A_player, &B_player,
+					&C_player);
 		else if (!strcmp(cmd, "load"))
-			load(A_head,B_head,C_head,PAE_head,&A_player,&B_player,&C_player);
+			load(A_head, B_head, C_head, PAE_head, &A_player, &B_player,
+					&C_player);
 		else
 			printf("잘못입력하셨습니다.\n");
 
-		if(A_head == NULL && B_head == NULL && C_head == NULL)
-		{
-			//모든 패를 낸후 게임 재시작 사용자 정보및 기타 초기화 작업		
+		if (A_head == NULL && B_head == NULL && C_head == NULL) {
+			//모든 패를 낸후 게임 재시작 사용자 정보및 기타 초기화 작업
 			init();
 			call_show_pae();
 		}
@@ -84,13 +90,11 @@ void start_play(char input, int cmd) {
 		if (is_win(&A_player)) {
 			// 고 또는 스톱 처리 부탁.
 			if (!select_go_stop()) { //스톱..
-				printf("최종 승리점수 : %d\n",
-						update_player_score_and_money(&A_player, &B_player,
-								&C_player));
+				update_player_score_and_money(&A_player, &B_player, &C_player);
 				init();
 				call_show_pae();
 			} else { //고..
-
+				A_player.go_count++;
 				winner = 'B';
 				call_show_pae();
 			}
@@ -112,13 +116,12 @@ void start_play(char input, int cmd) {
 		// 승리조건이 성립한다면.
 		if (is_win(&B_player)) {
 			// 고 또는 스톱 처리 부탁.
-			if (!select_go_stop()) {
-				printf("최종 승리점수 : %d\n",
-						update_player_score_and_money(&B_player, &A_player,
-								&C_player));
+			if (!select_go_stop()) { // 스톱.
+				update_player_score_and_money(&B_player, &A_player, &C_player);
 				init();
 				call_show_pae();
-			} else {
+			} else { // 고.
+				B_player.go_count++;
 				winner = 'C';
 				call_show_pae();
 			}
@@ -142,13 +145,12 @@ void start_play(char input, int cmd) {
 		if (is_win(&C_player)) {
 			// 고 또는 스톱 처리 부탁.
 			if (!select_go_stop()) {		// 스톱.
-				printf("최종 승리점수 : %d\n",
-						update_player_score_and_money(&C_player, &A_player,
-								&B_player));
+				update_player_score_and_money(&C_player, &A_player, &B_player);
 				init();
 				call_show_pae();
 			} else // 고.
 			{
+				C_player.go_count++;
 				winner = 'A';
 				call_show_pae();
 			}
@@ -167,8 +169,8 @@ void call_show_pae() {
 	show_ex_pae(C_head, OWN_PAE, &C_player); // C 플레이어 가진 패 출력.
 
 	show_ex_pae(PAE_head, PLACE_PAE, NULL); // 깔린 패 출력
-	show_ex_pae(head, PLACE_PAE, NULL); //더미 패 출력
-	
+//	show_ex_pae(head, PLACE_PAE, NULL); //더미 패 출력
+
 	show_ex_pae(A_player.head_pae, GET_PAE, &A_player); // A플레이어 먹은 패 출력.
 	show_ex_pae(B_player.head_pae, GET_PAE, &B_player); // A플레이어 먹은 패 출력.
 	show_ex_pae(C_player.head_pae, GET_PAE, &C_player); // A플레이어 먹은 패 출력.
@@ -192,10 +194,10 @@ void show_ex_pae(P_HWATOO h, SHOW_TYPE type, player_info *info) {
 		printf("깔린 패) ");
 	if (GET_PAE == type)
 		// 먹은 패.
-		printf("%c 가 먹은패(%d) ", info->id[0], info->total_score);
+		printf("%c 가 먹은패(%d) ) ", info->id[0], info->total_score);
 
 	for (; h; h = h->next)
-		printf("%d%s  ", h->no, h->name);
+		printf("%d%s(%d)  ", h->no, h->name, h->isSSangpi);
 
 	printf("\n\n");
 }
@@ -220,7 +222,7 @@ void show_pae(P_HWATOO h, char player, player_info *info) {
 	else
 		printf("%c 가 먹은패 ", player);
 	for (; h; h = h->next)
-		printf("%d%s  ", h->no, h->name);
+		printf("%d%s(%d)  ", h->no, h->name, h->isSSangpi);
 
 	printf("\n\n");
 }
