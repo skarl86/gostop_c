@@ -36,7 +36,6 @@ int main() {
 		else if (*cmd >= 49 && *cmd <= 55 && strlen(cmd) == 1) {
 			start_play(winner, atoi(cmd));	//play시작
 		} else if (*cmd == 57 && strlen(cmd) == 1) {
-<<<<<<< HEAD
 			select_sip_or_pi();
 		} else if (!strcmp(cmd, "save")){
 			save(head,A_head, B_head, C_head, PAE_head, &A_player, &B_player,&C_player);
@@ -45,15 +44,6 @@ int main() {
 			load(head,A_head, B_head, C_head, PAE_head, &A_player, &B_player, &C_player);
 			call_show_pae();
 		}
-=======
-			printf("7이상의 숫자 입력");
-		} else if (!strcmp(cmd, "save"))
-			save(A_head, B_head, C_head, PAE_head, &A_player, &B_player,
-					&C_player);
-		else if (!strcmp(cmd, "load"))
-			load(A_head, B_head, C_head, PAE_head, &A_player, &B_player,
-					&C_player);
->>>>>>> FETCH_HEAD
 		else
 			printf("잘못입력하셨습니다.\n");
 
@@ -221,11 +211,7 @@ void start_play(char input, int cmd) {
 		// 승리조건이 성립한다면.
 		if (is_win(&A_player)) {
 			// 고 또는 스톱 처리 부탁.
-<<<<<<< HEAD
 			if (!select_go_stop(A_head)) { //스톱..
-=======
-			if (!select_go_stop()) { //스톱..
->>>>>>> FETCH_HEAD
 				update_player_score_and_money(&A_player, &B_player, &C_player);
 				init();
 				call_show_pae();
@@ -260,11 +246,7 @@ void start_play(char input, int cmd) {
 		// 승리조건이 성립한다면.
 		if (is_win(&B_player)) {
 			// 고 또는 스톱 처리 부탁.
-<<<<<<< HEAD
 			if (!select_go_stop(B_head)) { // 스톱.
-=======
-			if (!select_go_stop()) { // 스톱.
->>>>>>> FETCH_HEAD
 				update_player_score_and_money(&B_player, &A_player, &C_player);
 				init();
 				call_show_pae();
@@ -300,11 +282,7 @@ void start_play(char input, int cmd) {
 		// 승리조건이 성립한다면.
 		if (is_win(&C_player)) {
 			// 고 또는 스톱 처리 부탁.
-<<<<<<< HEAD
 			if (!select_go_stop(C_head)) {		// 스톱.
-=======
-			if (!select_go_stop()) {		// 스톱.
->>>>>>> FETCH_HEAD
 				update_player_score_and_money(&C_player, &A_player, &B_player);
 				init();
 				call_show_pae();
@@ -329,11 +307,8 @@ void call_show_pae() {
 	show_ex_pae(C_head, OWN_PAE, &C_player); // C 플레이어 가진 패 출력.
 
 	show_ex_pae(PAE_head, PLACE_PAE, NULL); // 깔린 패 출력
-<<<<<<< HEAD
 	
 ///	printf("더미 Test\n\n");
-=======
->>>>>>> FETCH_HEAD
 //	show_ex_pae(head, PLACE_PAE, NULL); //더미 패 출력
 
 	show_ex_pae(A_player.head_pae, GET_PAE, &A_player); // A플레이어 먹은 패 출력.
