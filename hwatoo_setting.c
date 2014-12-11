@@ -33,18 +33,20 @@ void init() {
 	B_head = give_pae(); // B에게 패돌리기
 	C_head = give_pae(); // C에게 패돌리기
 	PAE_head = give_pae(); //패 깔기
+	
 	//바닥패에 하나를 더미패에 넣기
-	temp = PAE_head -> next;
-	PAE_head -> next = NULL;
-	PAE_head -> next = head;
+	temp = PAE_head->next;
+	PAE_head->next = NULL;
+	PAE_head->next = head;
 	head = PAE_head;
 	PAE_head = temp;
-
+	head =  generate_random(head);
+	//
 	/* 흔들기와 총통 체크 함수 호출 */
-	//swing_chongtong_check(&A_player, A_head);
-	//swing_chongtong_check(&B_player, B_head);
-	//swing_chongtong_check(&C_player, C_head);
-	// 총통 (점수 계산하고 끝내는거 추가해야함!!)
+	swing_chongtong_check(&A_player, A_head);
+	swing_chongtong_check(&B_player, B_head);
+	swing_chongtong_check(&C_player, C_head);
+	//총통
 	/*
 	 if (A_player.isChongtong)
 	 winner = 'A';
@@ -54,7 +56,39 @@ void init() {
 	 winner = 'C';
 	 */
 }
+P_HWATOO generate_random(P_HWATOO head)
+{
 
+	P_HWATOO  arr[21];
+	P_HWATOO  p_arr[21];
+	P_HWATOO temp = head;
+	int i,num;
+	for( i = 0; i < 21; i++)
+	{
+		p_arr[i] = NULL;
+	}
+	for( i = 0; i < 21; i++)//배열에 포인터 넣기
+	{
+		arr[i] = temp;
+		temp = temp -> next;
+	}
+	i = 0;	//i초기화
+	while(i != 21)
+	{
+		//srand(time(NULL));
+		num = rand() % 21;
+		if(p_arr[num] == NULL)
+			p_arr[num] = arr[i++];
+				
+	}
+	for(i = 0; i < 20; i++)
+	{
+		p_arr[i] -> next = p_arr[i+1];
+	}
+	p_arr[20] -> next = NULL;
+	head = p_arr[0];
+	return head;
+}
 /* 초기 화투 더미 셋팅 함수 */
 P_HWATOO init_pae() {
 	P_HWATOO head = NULL;

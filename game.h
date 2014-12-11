@@ -15,6 +15,6 @@ typedef struct game
 }GAME, *P_GAME;
 
 player_info * next_turn(char player_id);
-P_HWATOO steal_pi(player_info * player);
+extern P_HWATOO steal_pi(player_info * player);
 
 #endif /* GAME_H_ */
